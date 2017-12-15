@@ -1,11 +1,11 @@
 
 //General Configuration, you can change it!
 //-------------------------------------------------------------------------------\
-var pop_size = 100; //popualtion size 											 |
+var pop_size = 50; //popualtion size 											 |
 var frameLimit = 500; //lifespan in frames                                       |
 var ObstaclesNumber = 70; //number of random obstacles                           |
 var randomObstacles = false; //true = generate obstacles in random positions     |
-var maxGen = 50;
+var maxGen = 30;//                                                                |
 //Screen dimension                                                               |
 var w = 1000; //width of the screen X											 |
 var h = 800; //height of the screen Y                                            |
@@ -24,11 +24,21 @@ var genCounter = 0; //generation counter
 var best_one; //the best Individual highest fitness
 var obst; //Obstacles
 var avarageFitness = 0;
+var table;
+var newRow;
+var tableSaveCounter = 0;
 
 
 //executed in the code's start
 function setup() {
 	frameRate(60);
+
+	table = new p5.Table();
+	table.addColumn('Generation');
+    table.addColumn('Best Fitness');
+    table.addColumn('Avarage Fitness');
+
+
 	createCanvas(w, h); //create the background
 	textSize(30);
 	for(var i=0; i<pop_size; i++){ //create population
@@ -37,12 +47,17 @@ function setup() {
 	obst = new Obstacles; //create obstacles
 	obst.obsGen();
 	img = loadImage("skull.ico");
-	img2 = loadImage("Simoes.png")
+	//img2 = loadImage("Simoes.png")
+    save(population[0].pos, "test");
 }
 
 //loop executed in every frame
 function draw() {
+
 	if(genCounter > maxGen){
+		saveTable(table, 'info' + tableSaveCounter + '.csv');
+		//table.clearRows();
+		tableSaveCounter++;
 		for(var i = 0; i<population.length; i++){
 			population[i].resetDNA();
 			genCounter = 0;
@@ -51,8 +66,8 @@ function draw() {
 	background(230); //background color
 
 	fill(255, 255, 0); //goal color
-	imageMode(CENTER);
-    image(img2, goalx-40, goaly+65, img2.width/3, img2.height/3);
+	//imageMode(CENTER);
+    //image(img2, goalx-40, goaly+65, img2.width/3, img2.height/3);
 	ellipse(goalx, goaly, 10, 10); //goal format
 	fill(10); //text color
 
@@ -77,10 +92,10 @@ function draw() {
 		}
 	}
 
+    max = -1; //for math;
 	if(count === frameLimit){ //when reach lifespan's end
 		var localFit;
 		avarageFitness = 0;
-        max = -1; //for math;
 		//find the best individual
 		for(i=0; i<population.length; i++){
 			localFit = population[i].fitness();
@@ -96,6 +111,12 @@ function draw() {
             if (population[i] !== best_one) population[i].crossover();
             population[i].reset();
         }
+
+        newRow = table.addRow();
+		newRow.setNum('Generation', genCounter);
+        newRow.setNum('Best Fitness', max);
+        newRow.setNum('Avarage Fitness', avarageFitness);
+
 		count = 0; //reset frame counter
 		genCounter++; //next generation
 	}
