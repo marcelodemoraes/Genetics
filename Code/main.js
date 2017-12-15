@@ -3,9 +3,9 @@
 //-------------------------------------------------------------------------------\
 var pop_size = 100; //popualtion size 											 |
 var frameLimit = 500; //lifespan in frames                                       |
-var ObstaclesNumber = 70; //number of random obstacles                           |
+var ObstaclesNumber = 0; //number of random obstacles                           |
 var randomObstacles = false; //true = generate obstacles in random positions     |
-var maxGen = 200;//                                                                |
+var maxGen = 200;//                                                              |
 //Screen dimension                                                               |
 var w = 1000; //width of the screen X											 |
 var h = 800; //height of the screen Y                                            |
@@ -14,7 +14,9 @@ var goalx = 200; //goal x position                                              
 var goaly = 200; //goal y position                                               |
 //Initial position                                                               |
 var initialX = w-50; //initial x position								         |
-var initialY = h-50; //initial y position                                        |
+var initialY = h-50; //initial y position              				             |
+// 																				 |
+var simoes = false;//                                                            |
 //-------------------------------------------------------------------------------/
 
 //global variables, do no change it! - or do, it's your problem, not mine
@@ -23,9 +25,9 @@ var count = 0; //frames counter
 var genCounter = 0; //generation counter
 var best_one; //the best Individual highest fitness
 var obst; //Obstacles
-var avarageFitness = 0;
-var table;
-var newRow;
+var averageFitness = 0;
+var table;//for saving data
+var newRow; //for saving data
 var tableSaveCounter = 0;
 
 
@@ -36,7 +38,7 @@ function setup() {
 	table = new p5.Table();
 	table.addColumn('Generation');
     table.addColumn('Best Fitness');
-    table.addColumn('Avarage Fitness');
+    table.addColumn('average Fitness');
 
 
 	createCanvas(w, h); //create the background
@@ -47,7 +49,7 @@ function setup() {
 	obst = new Obstacles; //create obstacles
 	obst.obsGen();
 	img = loadImage("skull.ico");
-	//img2 = loadImage("Simoes.png")
+	img2 = loadImage("Simoes.png")
     save(population[0].pos, "test");
 }
 
@@ -55,7 +57,7 @@ function setup() {
 function draw() {
 
 	if(genCounter > maxGen){
-		saveTable(table, 'info' + tableSaveCounter + '.csv');
+		//saveTable(table, 'info' + tableSaveCounter + '.csv');
 		table.clearRows();
 		tableSaveCounter++;
 		for(var i = 0; i<population.length; i++){
@@ -66,9 +68,14 @@ function draw() {
 	background(230); //background color
 
 	fill(255, 255, 0); //goal color
-	//imageMode(CENTER);
-    //image(img2, goalx-40, goaly+65, img2.width/3, img2.height/3);
-	ellipse(goalx, goaly, 10, 10); //goal format
+	
+	if(simoes){
+		imageMode(CENTER);
+		image(img2, goalx+5, goaly+75, img2.width/2, img2.height/2);
+	}
+	else ellipse(goalx, goaly, 10, 10); //goal format
+
+	
 	fill(10); //text color
 
 	//Population Information
@@ -78,7 +85,7 @@ function draw() {
 	text(count+"/"+frameLimit, 30, h-30);
     if(genCounter > 0){
         text("Best Fitness:       " + nf(best_one.fit, 2, 10), w-450, 30);
-        text("Avarage Fitness: " + nf(avarageFitness, 2, 10), w-450, 60);
+        text("Average Fitness: " + nf(averageFitness, 2, 10), w-450, 60);
 	}
 
 	count++; //count every frame
@@ -95,17 +102,17 @@ function draw() {
     max = -1; //for math;
 	if(count === frameLimit){ //when reach lifespan's end
 		var localFit;
-		avarageFitness = 0;
+		averageFitness = 0;
 		//find the best individual
 		for(i=0; i<population.length; i++){
 			localFit = population[i].fitness();
-			avarageFitness += localFit;
+			averageFitness += localFit;
 			if(localFit>= max){
 				max = localFit;
 				best_one = population[i];
 			}
 		}
-		avarageFitness /= pop_size;
+		averageFitness /= pop_size;
 		//crossover with the best individual
 		for(i=0; i<population.length; i++) {
             if (population[i] !== best_one) population[i].crossover();
@@ -115,7 +122,7 @@ function draw() {
         newRow = table.addRow();
 		newRow.setNum('Generation', genCounter);
         newRow.setNum('Best Fitness', max);
-        newRow.setNum('Avarage Fitness', avarageFitness);
+        newRow.setNum('average Fitness', averageFitness);
 
 		count = 0; //reset frame counter
 		genCounter++; //next generation
