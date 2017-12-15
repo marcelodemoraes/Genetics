@@ -1,11 +1,11 @@
 
 //General Configuration, you can change it!
 //-------------------------------------------------------------------------------\
-var pop_size = 50; //popualtion size 											 |
+var pop_size = 100; //popualtion size 											 |
 var frameLimit = 500; //lifespan in frames                                       |
 var ObstaclesNumber = 70; //number of random obstacles                           |
 var randomObstacles = false; //true = generate obstacles in random positions     |
-var maxGen = 30;//                                                                |
+var maxGen = 200;//                                                                |
 //Screen dimension                                                               |
 var w = 1000; //width of the screen X											 |
 var h = 800; //height of the screen Y                                            |
@@ -56,7 +56,7 @@ function draw() {
 
 	if(genCounter > maxGen){
 		saveTable(table, 'info' + tableSaveCounter + '.csv');
-		//table.clearRows();
+		table.clearRows();
 		tableSaveCounter++;
 		for(var i = 0; i<population.length; i++){
 			population[i].resetDNA();
