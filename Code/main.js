@@ -5,18 +5,17 @@ var pop_size = 250; //popualtion size 											 |
 var frameLimit = 500; //lifespan in frames                                       |
 var ObstaclesNumber = 70; //number of random obstacles                           |
 var randomObstacles = false; //true = generate obstacles in random positions     |
-                                                                                 |
+//                                                                               |
 //Screen dimension                                                               |
 var w = 1000; //width of the screen X											 |
 var h = 800; //height of the screen Y                                            |
-                                                                                 |
-//goal location                                                                  |
-var goalx = 200;                                                                 |
-var goaly = 200;                                                                 |
-                                                                                 |
-//initial position																 |
-var initialX = w-50;															 |
-var initialY = h-50;                                                             |
+//                                                                               |
+//                                                                               |
+var goalx = 200; //goal x position                                               |
+var goaly = 200; //goal y position                                               |
+//                                                                               |
+var initialX = w-50; //initial x position								         |
+var initialY = h-50; //initial y position                                        |
 //-------------------------------------------------------------------------------/
 
 //global variables, do no change it! - or do, it's your problem, not mine
@@ -38,7 +37,7 @@ function setup() {
 	obst = new Obstacles; //create obstacles
 	obst.obsGen();
 	img = loadImage("skull.ico");
-	img2 = loadImage("simoes.jpg")
+	img2 = loadImage("Simoes.png")
 }
 
 //loop executed in every frame
@@ -47,7 +46,7 @@ function draw() {
 
 	fill(255, 255, 0); //goal color
 	imageMode(CENTER);
-    //image(img2, goalx-40, goaly+65, img2.width/3, img2.height/3);
+    image(img2, goalx-40, goaly+65, img2.width/3, img2.height/3);
 	ellipse(goalx, goaly, 10, 10); //goal format
 	fill(10); //text color
 
