@@ -1,23 +1,25 @@
+
 //General Configuration, you can change it!
-var pop_size = 250; //popualtion size
-var frameLimit = 500; //lifespan in frames
-var ObstaclesNumber = 70; //number of random obstacles
-var randomObstacles = false; //true = generate obstacles in random positions
+//-------------------------------------------------------------------------------\
+var pop_size = 250; //popualtion size 											 |
+var frameLimit = 500; //lifespan in frames                                       |
+var ObstaclesNumber = 70; //number of random obstacles                           |
+var randomObstacles = false; //true = generate obstacles in random positions     |
+                                                                                 |
+//Screen dimension                                                               |
+var w = 1000; //width of the screen X											 |
+var h = 800; //height of the screen Y                                            |
+                                                                                 |
+//goal location                                                                  |
+var goalx = 200;                                                                 |
+var goaly = 200;                                                                 |
+                                                                                 |
+//initial position																 |
+var initialX = w-50;															 |
+var initialY = h-50;                                                             |
+//-------------------------------------------------------------------------------/
 
-//Screen dimension
-var w = 1000; //width of the screen X
-var h = 800; //height of the screen Y
-
-//goal location
-var goalx = 200;
-var goaly = 200;
-
-//initial position
-var initialX = w-50;
-var initialY = h-50;
-
-
-//global variables, do no change it! - or do, it's your problem
+//global variables, do no change it! - or do, it's your problem, not mine
 var population = []; //vector of Individuals
 var count = 0; //frames counter
 var genCounter = 0; //generation counter
