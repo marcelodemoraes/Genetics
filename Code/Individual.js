@@ -10,6 +10,10 @@ function Individual(){ //Representes a individual of the population
 
 	this.diameter = 20; //individual size
 
+	this.resetDNA = function() {
+	    this.dna = new DNA();
+    }
+
 	this.reset = function(){ //reset the population to a new generation
 		this.pos.x = initialX; //initial x position
 		this.pos.y = initialY; //initial y position
@@ -49,7 +53,7 @@ function Individual(){ //Representes a individual of the population
 	this.display = function(isBest){ //shows the individuals
 		if(!this.life){ //if the invidivual is dead it recives another color
             if (isBest) { //color of the best individual
-                fill(200, 100, 200);
+                fill(200, 250, 200);
                 ellipse(this.pos.x, this.pos.y, this.diameter, this.diameter);
             }
             else{
@@ -78,7 +82,7 @@ function Individual(){ //Representes a individual of the population
 
 	this.fitness = function(){ //calculte Individual fitness
 		//distance from objective + how much it moved when lifespan ends
-		this.fit = 1/(dist(this.pos.x, this.pos.y, goalx, goaly) + ((this.moved)*4) + (!this.life * 1000));
+		this.fit = 100/(dist(this.pos.x, this.pos.y, goalx, goaly) + ((this.moved)*4) + (!this.life * 1000));
 		return this.fit;
 	};
 

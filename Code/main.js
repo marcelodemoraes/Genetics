@@ -1,19 +1,18 @@
 
 //General Configuration, you can change it!
 //-------------------------------------------------------------------------------\
-var pop_size = 250; //popualtion size 											 |
+var pop_size = 100; //popualtion size 											 |
 var frameLimit = 500; //lifespan in frames                                       |
 var ObstaclesNumber = 70; //number of random obstacles                           |
 var randomObstacles = false; //true = generate obstacles in random positions     |
-//                                                                               |
+var maxGen = 50;
 //Screen dimension                                                               |
 var w = 1000; //width of the screen X											 |
 var h = 800; //height of the screen Y                                            |
-//                                                                               |
-//                                                                               |
+//Goal position                                                                  |
 var goalx = 200; //goal x position                                               |
 var goaly = 200; //goal y position                                               |
-//                                                                               |
+//Initial position                                                               |
 var initialX = w-50; //initial x position								         |
 var initialY = h-50; //initial y position                                        |
 //-------------------------------------------------------------------------------/
@@ -24,6 +23,7 @@ var count = 0; //frames counter
 var genCounter = 0; //generation counter
 var best_one; //the best Individual highest fitness
 var obst; //Obstacles
+var avarageFitness = 0;
 
 
 //executed in the code's start
@@ -42,6 +42,12 @@ function setup() {
 
 //loop executed in every frame
 function draw() {
+	if(genCounter > maxGen){
+		for(var i = 0; i<population.length; i++){
+			population[i].resetDNA();
+			genCounter = 0;
+		}
+	}
 	background(230); //background color
 
 	fill(255, 255, 0); //goal color
@@ -54,14 +60,15 @@ function draw() {
 	text("Population: " + pop_size, 30, 30);
 	text("Time: " + floor(count/60), 30, 60);
 	text("Generation: " + genCounter, 30, 90);
-	text(count, 30, h-30);
-    if(genCounter > 0) text("Best Fitness: " + nf(best_one.fit, 2, 10), w-400, 30);
+	text(count+"/"+frameLimit, 30, h-30);
+    if(genCounter > 0){
+        text("Best Fitness:       " + nf(best_one.fit, 2, 10), w-450, 30);
+        text("Avarage Fitness: " + nf(avarageFitness, 2, 10), w-450, 60);
+	}
 
 	count++; //count every frame
-
-
 	obst.show();//show obstacles
-	for(var i=0; i<population.length; i++){ //for every Individual
+	for(i=0; i<population.length; i++){ //for every Individual
 		population[i].update(); //update it's position and speed
 		if(population[i] === best_one) population[i].display(1); //if it's the best individual
 		else population[i].display(0); //if it's not
@@ -71,14 +78,19 @@ function draw() {
 	}
 
 	if(count === frameLimit){ //when reach lifespan's end
+		var localFit;
+		avarageFitness = 0;
         max = -1; //for math;
 		//find the best individual
 		for(i=0; i<population.length; i++){
-			if(population[i].fitness() >= max){
-				max = population[i].fitness();
+			localFit = population[i].fitness();
+			avarageFitness += localFit;
+			if(localFit>= max){
+				max = localFit;
 				best_one = population[i];
 			}
 		}
+		avarageFitness /= pop_size;
 		//crossover with the best individual
 		for(i=0; i<population.length; i++) {
             if (population[i] !== best_one) population[i].crossover();
@@ -88,5 +100,3 @@ function draw() {
 		genCounter++; //next generation
 	}
 }
-
-
